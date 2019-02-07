@@ -6,7 +6,7 @@ using namespace std;
 int main() {
     PersonalBudget test;
     while (true) {
-        test.showStartMenu();
+        test.userMenu();
     }
     return 0;
 }

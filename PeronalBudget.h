@@ -12,7 +12,8 @@ using namespace std;
 
 class PersonalBudget {
 public:
-    void showStartMenu();
+    void loginMenu();
+    void userMenu();
 };
 
 
