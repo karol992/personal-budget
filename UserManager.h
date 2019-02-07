@@ -9,6 +9,7 @@
 using namespace std;
 
 class UserManager {
+
 };
 
 #endif // USERMANAGER_H
