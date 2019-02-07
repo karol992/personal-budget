@@ -7,6 +7,7 @@
 
 #include "User.h"
 #include "UsersFile.h"
+#include "Interface.h"
 
 using namespace std;
 
@@ -17,6 +18,7 @@ class StartManager {
     bool isLoginExist(string login);
     int getNewUserId();
 public:
+    StartManager();
     void registration();
     void showUsers();
 };

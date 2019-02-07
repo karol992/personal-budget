@@ -12,7 +12,7 @@ void PersonalBudget::loginMenu() {
     cout << "Twoj wybor: ";
     switch (Interface::loadSign()) {
     case '1':
-        //registration();
+        registration();
         break;
     case '2':
         //login();

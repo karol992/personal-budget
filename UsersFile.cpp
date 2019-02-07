@@ -17,6 +17,25 @@ void UsersFile::addUserToFile(User user) {
 }
 vector<User> UsersFile::loadUsersFromFile() {
     vector<User> users;
-
+    CMarkup xml;
+    xml.Load(USERS_FILENAME);
+    while (xml.FindElem("USER")) {
+        User user;
+        xml.IntoElem();
+        xml.FindElem("ID");
+        user.setId(atoi(MCD_2PCSZ(xml.GetData())));
+        xml.FindElem("LOGIN");
+        user.setLogin(xml.GetData());
+        xml.FindElem("PASSWORD");
+        user.setPassword(xml.GetData());
+        xml.FindElem("NAME");
+        user.setName(xml.GetData());
+        xml.FindElem("SURNAME");
+        user.setSurname(xml.GetData());
+        xml.OutOfElem();
+        users.push_back(user);
+    }
     return users;
 }
+
+//
