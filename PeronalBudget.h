@@ -33,6 +33,7 @@ public:
     bool userIsLogged();
     void userLogOut();
     void changeLoggedUserPassword();
+    void addIncome();
 };
 
 #endif // PERSONALBUDGET_H

@@ -42,7 +42,7 @@ void PersonalBudget::userMenu() {
     cout << "Twoj wybor: ";
     switch (Interface::loadSign()) {
     case '1':
-        //addIncome();
+        addIncome();
         break;
     case '2':
         //addExpense();
@@ -85,5 +85,8 @@ void PersonalBudget::userLogOut() {
 }
 void PersonalBudget::changeLoggedUserPassword() {
     startManager.changeLoggedUserPassword();
+}
+void PersonalBudget::addIncome() {
+    userManager->addIncome();
 }
 //
