@@ -15,7 +15,12 @@ int _main() {
 int main() {
     PersonalBudget test;
     while(true) {
-        test.loginMenu();
+        if(!test.userIsLogged()) {
+            test.loginMenu();
+        }
+        else {
+            test.userMenu();
+        }
     }
     return 0;
 }
