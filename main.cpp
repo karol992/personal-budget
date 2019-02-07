@@ -3,8 +3,10 @@
 
 using namespace std;
 
-int main()
-{
-    PersonalBudget b;
+int main() {
+    PersonalBudget test;
+    while (true) {
+        test.showStartMenu();
+    }
     return 0;
 }
