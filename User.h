@@ -11,7 +11,7 @@ class User {
 public:
     void setId(int newId);
     void setLogin(string newLogin);
-    void setPasword(string newPasword);
+    void setPassword(string newPassword);
     void setName(string newName);
     void setSurname(string surname);
 

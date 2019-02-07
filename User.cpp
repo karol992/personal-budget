@@ -6,7 +6,7 @@ void User::setId(int newId) {
 void User::setLogin(string newLogin){
     login = newLogin;
 }
-void User::setPasword(string newPassword){
+void User::setPassword(string newPassword){
     password = newPassword;
 }
 void User::setName(string newName){
