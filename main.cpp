@@ -4,8 +4,8 @@
 using namespace std;
 
 int _main() {
-    PersonalBudget test;
-    StartManager a;
+    PersonalBudget test("xml/users.xml","xml/incomes.xml","xml/expenses.xml");
+    StartManager a("xml/users.xml");
     //a.registration();
     //a.registration();
     //a.registration();
@@ -13,7 +13,7 @@ int _main() {
     return 0;
 }
 int main() {
-    PersonalBudget test;
+    PersonalBudget test("xml/users.xml","xml/incomes.xml","xml/expenses.xml");
     while(true) {
         if(!test.userIsLogged()) {
             test.loginMenu();

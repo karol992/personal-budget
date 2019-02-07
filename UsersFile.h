@@ -11,7 +11,7 @@ using namespace std;
 class UsersFile {
     const string USERS_FILENAME;
 public:
-    UsersFile(): USERS_FILENAME("xml/users.xml") {};
+    UsersFile(string usersFilename): USERS_FILENAME(usersFilename) {};
     void addUserToFile(User user);
     vector<User> loadUsersFromFile();
     void changePasswordInFile (User loggedUser);
