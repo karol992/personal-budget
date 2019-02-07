@@ -16,6 +16,9 @@ public:
     void loginMenu();
     void userMenu();
     void registration();
+    void login();
+    bool userIsLogged();
+    void userLogOut();
 };
 
 

@@ -13,7 +13,7 @@ void StartManager::registration() {
 User StartManager::enterNewUserData() {
     User user;
     user.setId(getNewUserId());
-    string login, password, name, surname;
+    string login = "", password = "", name = "", surname = "";
     do {
         system("cls");
         cout << "    >>> REJESTRACJA <<<" << endl;
@@ -48,6 +48,43 @@ int StartManager::getNewUserId() {
         return 1;
     else
         return users.back().getId() + 1;
+}
+void StartManager::login() {
+    string login = "", password = "";
+    system("cls");
+    cout << "    >>> LOGOWANIE <<<" << endl;
+    cout << "---------------------------" << endl;
+    cout << "Podaj login: ";
+    cin >> login;
+    for (int i = 0; i < users.size(); i++) {
+        if (users[i].getLogin() == login) {
+            for (int tryAmount = 3; tryAmount > 0; tryAmount--) {
+                cout << "Podaj haslo. Pozostalo prob: " << tryAmount << ": ";
+                cin >> password;
+
+                if (users[i].getPassword() == password) {
+                    cout << endl << "Zalogowales sie." << endl << endl;
+                    system("pause");
+                    loggedUser = users[i];
+                    return;
+                }
+            }
+            cout << "Wprowadzono 3 razy bledne haslo." << endl;
+            system("pause");
+            return;
+        }
+    }
+    cout << "Nie ma uzytkownika z takim loginem" << endl << endl;
+    system("pause");
+}
+bool StartManager::userIsLogged() {
+if (loggedUser.getId() > 0)
+        return true;
+    else
+        return false;
+}
+void StartManager::clearLoggedUser() {
+    loggedUser.clear();
 }
 //
 

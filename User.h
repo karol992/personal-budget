@@ -9,6 +9,7 @@ class User {
     int id;
     string login, password, name, surname;
 public:
+    User();
     void setId(int newId);
     void setLogin(string newLogin);
     void setPassword(string newPassword);
@@ -20,6 +21,7 @@ public:
     string getPassword();
     string getName();
     string getSurname();
+    void clear();
 };
 
 #endif // USER_H
