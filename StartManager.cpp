@@ -4,9 +4,6 @@ StartManager::StartManager() {
     users = usersFile.loadUsersFromFile();
 }
 void StartManager::registration() {
-    system("cls");
-    cout << "    >>> REJESTRACJA <<<" << endl;
-    cout << "---------------------------" << endl;
     User user = enterNewUserData();
     users.push_back(user);
     usersFile.addUserToFile(user);
@@ -18,6 +15,9 @@ User StartManager::enterNewUserData() {
     user.setId(getNewUserId());
     string login, password, name, surname;
     do {
+        system("cls");
+        cout << "    >>> REJESTRACJA <<<" << endl;
+        cout << "---------------------------" << endl;
         cout << "Podaj login: ";
         cin >> login;
         user.setLogin(login);
@@ -37,6 +37,7 @@ bool StartManager::isLoginExist(string login) {
     for (int i=0; i < users.size(); i++) {
         if (users[i].getLogin() == login) {
             cout << endl << "Istnieje uzytkownik o takim loginie." << endl;
+            system("pause");
             return true;
         }
     }
