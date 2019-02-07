@@ -37,5 +37,19 @@ vector<User> UsersFile::loadUsersFromFile() {
     }
     return users;
 }
+void UsersFile::changePasswordInFile (User loggedUser) {
+    CMarkup xml;
+    xml.Load(USERS_FILENAME);
+    xml.ResetPos();
+    while ( xml.FindElem("USER") ) {
+        xml.FindChildElem( "ID" );
+        if ( atoi( MCD_2PCSZ(xml.GetChildData())) == loggedUser.getId() ) {
+            xml.FindChildElem( "PASSWORD" );
+            xml.SetChildData( loggedUser.getPassword() );
+            break;
+        }
+    }
+    xml.Save(USERS_FILENAME);
+}
 
 //

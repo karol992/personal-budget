@@ -14,6 +14,7 @@ public:
     UsersFile(): USERS_FILENAME("xml/users.xml") {};
     void addUserToFile(User user);
     vector<User> loadUsersFromFile();
+    void changePasswordInFile (User loggedUser);
 };
 
 #endif // USERS_H

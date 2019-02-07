@@ -86,6 +86,23 @@ if (loggedUser.getId() > 0)
 void StartManager::clearLoggedUser() {
     loggedUser.clear();
 }
+void StartManager::changeLoggedUserPassword() {
+    string newPassword = "";
+    cout << "Podaj nowe haslo: ";
+    cin >> newPassword;
+
+    for (int i=0; i < users.size(); i++)
+    {
+        if (users[i].getId() == loggedUser.getId())
+        {
+            users[i].setPassword(newPassword);
+            loggedUser.setPassword(newPassword);
+            cout << "Haslo zostalo zmienione." << endl << endl;
+            system("pause");
+        }
+    }
+    usersFile.changePasswordInFile(loggedUser);
+}
 //
 
 //testMethods below
