@@ -4,12 +4,13 @@
 using namespace std;
 
 int _main() {
-    PersonalBudget test("xml/users.xml","xml/incomes.xml","xml/expenses.xml");
-    StartManager a("xml/users.xml");
-    //a.registration();
-    //a.registration();
-    //a.registration();
-    a.showUsers();
+    string a;
+    int b;
+    while (true) {
+    cin >> a;
+    b = a[0];
+    cout << b << endl;
+    }
     return 0;
 }
 int main() {

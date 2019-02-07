@@ -23,6 +23,10 @@ class UserManager {
 
     int getCurrentDate();
     int getUserDate();
+    bool correctSignsInDate(string date);
+    int convertStringDateToInt(string date);
+    int daysInMonth(int year, int month);
+    double getTransationValue();
 public:
     UserManager(string newIncomeFilename, string newExpensesFilename, User newLoggedUser)
     : INCOMES_FILENAME(newIncomeFilename), EXPENSES_FILNAME(newExpensesFilename), loggedUserCopy(newLoggedUser) {};
