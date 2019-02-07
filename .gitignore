@@ -1,0 +1,11 @@
+bin/
+obj/
+notes/
+plan/
+xml/
+*.cbp
+*.depend
+*.layout
+*.txt
+*.exe
+*.o
