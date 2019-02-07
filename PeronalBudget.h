@@ -18,6 +18,7 @@ public:
     void registration();
     void login();
     bool userIsLogged();
+    void userLogOut();
 };
 
 

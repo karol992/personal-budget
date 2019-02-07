@@ -83,6 +83,9 @@ if (loggedUser.getId() > 0)
     else
         return false;
 }
+void StartManager::clearLoggedUser() {
+    loggedUser.clear();
+}
 //
 
 //testMethods below

@@ -60,8 +60,7 @@ void PersonalBudget::userMenu() {
         //changeLoggedUserPassword();
         break;
     case '7':
-        //userLogOut();
-        exit(0);// TEST
+        userLogOut();
         break;
     default:
         cout << endl << "Nie ma takiej opcji w menu." << endl << endl;
@@ -78,5 +77,7 @@ void PersonalBudget::login() {
 bool PersonalBudget::userIsLogged() {
     return startManager.userIsLogged();
 }
-
+void PersonalBudget::userLogOut() {
+    startManager.clearLoggedUser();
+}
 //
