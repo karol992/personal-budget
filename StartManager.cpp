@@ -4,7 +4,7 @@ void StartManager::registration() {
     User user = enterNewUserData();
 
     users.push_back(user);
-    //usersFile.addUserToFile(user);
+    usersFile.addUserToFile(user);
     cout << endl << "Konto zalozono pomyslnie" << endl << endl;
     system("pause");
 }

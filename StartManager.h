@@ -11,8 +11,8 @@
 using namespace std;
 
 class StartManager {
-    User user;
     vector <User> users;
+    UsersFile usersFile;
     User enterNewUserData();
     bool isLoginExist(string login);
     int getNewUserId();
