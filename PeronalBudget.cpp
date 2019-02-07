@@ -69,3 +69,7 @@ void PersonalBudget::userMenu() {
         break;
     }
 }
+void PersonalBudget::registration() {
+    startManager.registration();
+}
+//
