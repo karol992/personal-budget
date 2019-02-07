@@ -15,3 +15,12 @@ char Interface::loadSign() {
     }
     return sign;
 }
+string Interface::firstCapitalRestLowercase(string word) {
+    if (!word.empty()) {
+        transform(word.begin(), word.end(), word.begin(), ::tolower);
+        word[0] = toupper(word[0]);
+    }
+    return word;
+}
+
+//

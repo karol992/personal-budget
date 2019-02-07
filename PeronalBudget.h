@@ -11,9 +11,11 @@
 using namespace std;
 
 class PersonalBudget {
+    StartManager startManager;
 public:
     void loginMenu();
     void userMenu();
+    void registration();
 };
 
 

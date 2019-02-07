@@ -2,13 +2,25 @@
 #define STARTMANAGER_H
 
 #include <iostream>
+#include <windows.h>
+#include <vector>
 
 #include "User.h"
-#include "UserFile.h"
+#include "UsersFile.h"
+#include "Interface.h"
 
 using namespace std;
 
 class StartManager {
+    vector <User> users;
+    UsersFile usersFile;
+    User enterNewUserData();
+    bool isLoginExist(string login);
+    int getNewUserId();
+public:
+    StartManager();
+    void registration();
+    void showUsers();
 };
 
 #endif // STARTMANAGER_H
