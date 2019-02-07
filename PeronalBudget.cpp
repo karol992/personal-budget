@@ -57,7 +57,7 @@ void PersonalBudget::userMenu() {
         //showBalance();
         break;
     case '6':
-        //changeLoggedUserPassword();
+        changeLoggedUserPassword();
         break;
     case '7':
         userLogOut();
@@ -79,5 +79,8 @@ bool PersonalBudget::userIsLogged() {
 }
 void PersonalBudget::userLogOut() {
     startManager.clearLoggedUser();
+}
+void PersonalBudget::changeLoggedUserPassword() {
+    startManager.changeLoggedUserPassword();
 }
 //

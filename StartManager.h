@@ -26,6 +26,7 @@ public:
     void showUsers();
     bool userIsLogged();
     void clearLoggedUser();
+    void changeLoggedUserPassword();
 };
 
 #endif // STARTMANAGER_H

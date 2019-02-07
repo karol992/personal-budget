@@ -19,6 +19,7 @@ public:
     void login();
     bool userIsLogged();
     void userLogOut();
+    void changeLoggedUserPassword();
 };
 
 
