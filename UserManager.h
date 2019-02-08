@@ -32,7 +32,9 @@ class UserManager {
     int getNewIncomeId();
 public:
     UserManager(string newIncomeFilename, string newExpensesFilename, User newLoggedUser)
-    : transactionFiles(newIncomeFilename, newExpensesFilename), loggedUserCopy(newLoggedUser) {};
+    : transactionFiles(newIncomeFilename, newExpensesFilename), loggedUserCopy(newLoggedUser) {
+    incomes = transactionFiles.loadIncomesFromFile();
+    };
     void addIncome();
 };
 

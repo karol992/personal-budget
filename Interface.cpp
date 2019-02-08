@@ -30,4 +30,10 @@ string Interface::doubleToString(double number)
     ss >> str;
     return  str;
 }
+double Interface::stringToDouble(string number) {
+    double doubleNumber;
+    istringstream iss(number);
+    iss >> doubleNumber;
+    return doubleNumber;
+}
 //

@@ -2,6 +2,7 @@
 #define TRANSACTIONFILES_H
 
 #include <iostream>
+#include <vector>
 #include "Transaction.h"
 #include "Markup.h"
 
@@ -14,6 +15,7 @@ public:
     TransactionFiles(string newIncomeFilename, string newExpensesFilename)
     : INCOMES_FILENAME(newIncomeFilename), EXPENSES_FILNAME(newExpensesFilename) {};
     void addIncomeToFile(Transaction income);
+    vector<Transaction> loadIncomesFromFile();
 };
 
 #endif // TRANSACTIONFILES_H

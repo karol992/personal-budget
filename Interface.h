@@ -14,6 +14,7 @@ public:
     static char loadSign();
     static string firstCapitalRestLowercase(string text);
     static string doubleToString(double number);
+    static double stringToDouble(string number);
 };
 
 
