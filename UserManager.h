@@ -6,6 +6,7 @@
 #include <windows.h>
 #include <ctime>
 #include <math.h>
+#include <iomanip>
 
 #include "TransactionFiles.h"
 #include "Transaction.h"
@@ -26,7 +27,9 @@ class UserManager {
     bool correctSignsInDate(string date);
     int convertStringDateToInt(string date);
     int daysInMonth(int year, int month);
-    double getTransationValue();
+    double getTransactionValue();
+    bool correctSignsInValue(string stringValue);
+    double convertStringValueToDouble(string stringValue);
 public:
     UserManager(string newIncomeFilename, string newExpensesFilename, User newLoggedUser)
     : INCOMES_FILENAME(newIncomeFilename), EXPENSES_FILNAME(newExpensesFilename), loggedUserCopy(newLoggedUser) {};

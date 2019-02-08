@@ -1,7 +1,7 @@
 #include "UserManager.h"
 
 void UserManager::addIncome() {
-    string value = "";
+    double value = 0;
     int date = NULL;
     char choice = NULL;
     do {
@@ -15,19 +15,20 @@ void UserManager::addIncome() {
         case 't':
             date = getCurrentDate();
             cout << "Wpisz wartosc przychodu: " << endl;
-            cin >> value;
+            value = getTransactionValue();
             break;
         case 'n':
             cout << "Wpisz date przychodu (yyyy-mm-dd): " << endl;
             date = getUserDate();
             cout << "Wpisz wartosc przychodu: " << endl;
-            cin >> value;
+            value = getTransactionValue();
             break;
         default:
             cout << "Niepoprawny wybor." << endl;
             break;
         }
     } while (choice!='n' && choice!='t');
+    system("pause");
 }
 int UserManager::getCurrentDate() {
     int currentDate;
@@ -114,6 +115,57 @@ int UserManager::daysInMonth(int year, int month) { // http://www.cplusplus.com/
         days = 31;
     return days;
 }
-double UserManager::getTransationValue() {
+double UserManager::getTransactionValue() {
+    double transactionValue = 0;
+    string stringValue = "";
+    do {
+        getline(cin, stringValue);
+        if (correctSignsInValue(stringValue)) {
+            transactionValue = convertStringValueToDouble(stringValue);
+            break;
+        }
+        cout << "Wpisz poprawna wartosc: " << endl;
+    } while (true);
+    return transactionValue;
+}
+bool UserManager::correctSignsInValue(string stringValue) {
+    int dotCounter = 0;
+    for (int i = 0; i < stringValue.size(); i++) {
+        int sign = stringValue[i];
+        if (sign == 44 || sign == 46) {
+            dotCounter++;
+            if (stringValue.size() > i+3) {
+                cout << "Zly format wartosci. #1" << endl;
+                return false;
+            }
+        }
+        if (((sign < 48) || (sign > 57)) && (sign != 46)&& (sign != 44)) {
+            cout << "Niepoprawny znak w wartosci." << endl;
+            return false;
+        }
+    }
+    if (dotCounter > 1) {
+        cout << "Zly format wartosci. #2" << endl;
+        return false;
+    }
+    if (stringValue.empty()) {
+        cout << "Nie wprowadzono wartosci." << endl;
+        return false;
+    }
+    return true;
+}
+double UserManager::convertStringValueToDouble(string stringValue) {
+    double doubleValue = 0;
+    for (int i = 0, j = stringValue.size()-1; i < stringValue.size(); i++, j--) {
+            int sign = stringValue[i];
+            if (sign == 44 || sign == 46) {
+                    doubleValue = doubleValue / pow(10,j+1);
+                    j = 0;
+            }
+            else {
+                    doubleValue = doubleValue + ((sign - 48) * pow(10,j));
+            }
+    }
+    return doubleValue;
 }
 //

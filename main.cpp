@@ -4,6 +4,7 @@
 using namespace std;
 
 int _main() {
+
     string a;
     int b;
     while (true) {
