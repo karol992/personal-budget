@@ -20,13 +20,14 @@ class StartManager {
     bool isLoginExist(string login);
     int getNewUserId();
 public:
-    StartManager();
+    StartManager(string usersFilename);
     void registration();
     void login();
     void showUsers();
     bool userIsLogged();
     void clearLoggedUser();
     void changeLoggedUserPassword();
+    User getLoggedUser();
 };
 
 #endif // STARTMANAGER_H

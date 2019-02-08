@@ -22,5 +22,18 @@ string Interface::firstCapitalRestLowercase(string word) {
     }
     return word;
 }
-
+string Interface::doubleToString(double number)
+{
+    stringstream ss;
+    string str;
+    ss << number;
+    ss >> str;
+    return  str;
+}
+double Interface::stringToDouble(string number) {
+    double doubleNumber;
+    istringstream iss(number);
+    iss >> doubleNumber;
+    return doubleNumber;
+}
 //

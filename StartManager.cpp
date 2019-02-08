@@ -1,6 +1,6 @@
 #include "StartManager.h"
 
-StartManager::StartManager() {
+StartManager::StartManager(string usersFilename) : usersFile(usersFilename) {
     users = usersFile.loadUsersFromFile();
 }
 void StartManager::registration() {
@@ -102,6 +102,9 @@ void StartManager::changeLoggedUserPassword() {
         }
     }
     usersFile.changePasswordInFile(loggedUser);
+}
+User StartManager::getLoggedUser() {
+    return loggedUser;
 }
 //
 

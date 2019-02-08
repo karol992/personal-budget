@@ -42,7 +42,7 @@ void PersonalBudget::userMenu() {
     cout << "Twoj wybor: ";
     switch (Interface::loadSign()) {
     case '1':
-        //addIncome();
+        addIncome();
         break;
     case '2':
         //addExpense();
@@ -73,6 +73,9 @@ void PersonalBudget::registration() {
 }
 void PersonalBudget::login() {
     startManager.login();
+    if (startManager.userIsLogged()) {
+        userManager = new UserManager(INCOMES_FILENAME, EXPENSES_FILENAME, startManager.getLoggedUser());
+    }
 }
 bool PersonalBudget::userIsLogged() {
     return startManager.userIsLogged();
@@ -82,5 +85,8 @@ void PersonalBudget::userLogOut() {
 }
 void PersonalBudget::changeLoggedUserPassword() {
     startManager.changeLoggedUserPassword();
+}
+void PersonalBudget::addIncome() {
+    userManager->addIncome();
 }
 //
