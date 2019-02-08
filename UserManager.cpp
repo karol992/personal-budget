@@ -1,8 +1,10 @@
 #include "UserManager.h"
 
 void UserManager::addIncome() {
-    double value = 0;
-    int date = NULL;
+    Transaction income;
+    string item;
+    income.setId(getNewIncomeId());
+    income.setUserId(loggedUserCopy.getId());
     char choice = NULL;
     do {
         system("cls");
@@ -13,21 +15,26 @@ void UserManager::addIncome() {
         choice = Interface::loadSign();
         switch (choice) {
         case 't':
-            date = getCurrentDate();
-            cout << "Wpisz wartosc przychodu: " << endl;
-            value = getTransactionValue();
+            income.setDate(getCurrentDate());
+            cout << "Wpisz wartosc przychodu: ";
+            income.setValue(getTransactionValue());
             break;
         case 'n':
-            cout << "Wpisz date przychodu (yyyy-mm-dd): " << endl;
-            date = getUserDate();
-            cout << "Wpisz wartosc przychodu: " << endl;
-            value = getTransactionValue();
+            cout << "Wpisz date przychodu (yyyy-mm-dd): ";
+            income.setDate(getUserDate());
+            cout << "Wpisz wartosc przychodu: ";
+            income.setValue(getTransactionValue());
             break;
         default:
             cout << "Niepoprawny wybor." << endl;
             break;
         }
     } while (choice!='n' && choice!='t');
+    cout << "Wpisz nazwe przychodu: ";
+    getline(cin, item);
+    income.setItem(item);
+    incomes.push_back(income);
+    transactionFiles.addIncomeToFile(income);
     system("pause");
 }
 int UserManager::getCurrentDate() {
@@ -168,4 +175,11 @@ double UserManager::convertStringValueToDouble(string stringValue) {
     }
     return doubleValue;
 }
+int UserManager::getNewIncomeId() {
+    if (incomes.empty() == true)
+        return 1;
+    else
+        return incomes.back().getId() + 1;
+}
+
 //

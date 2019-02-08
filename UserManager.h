@@ -18,8 +18,7 @@ using namespace std;
 class UserManager {
     vector <Transaction> incomes;
     vector <Transaction> expenses;
-    const string INCOMES_FILENAME;
-    const string EXPENSES_FILNAME;
+    TransactionFiles transactionFiles;
     User loggedUserCopy;
 
     int getCurrentDate();
@@ -30,9 +29,10 @@ class UserManager {
     double getTransactionValue();
     bool correctSignsInValue(string stringValue);
     double convertStringValueToDouble(string stringValue);
+    int getNewIncomeId();
 public:
     UserManager(string newIncomeFilename, string newExpensesFilename, User newLoggedUser)
-    : INCOMES_FILENAME(newIncomeFilename), EXPENSES_FILNAME(newExpensesFilename), loggedUserCopy(newLoggedUser) {};
+    : transactionFiles(newIncomeFilename, newExpensesFilename), loggedUserCopy(newLoggedUser) {};
     void addIncome();
 };
 
