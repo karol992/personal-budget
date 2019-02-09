@@ -8,6 +8,8 @@
 #include <math.h>
 #include <iomanip>
 #include <algorithm>
+#include <stdlib.h>
+#include <sstream>
 
 #include "TransactionFiles.h"
 #include "Transaction.h"
@@ -28,6 +30,7 @@ class UserManager {
     int getUserDate();
     bool correctSignsInDate(string date);
     int convertStringDateToInt(string date);
+    string convertIntDateToString(int date);
     int daysInMonth(int year, int month);
     double getTransactionValue();
     bool correctSignsInValue(string stringValue);
@@ -36,6 +39,9 @@ class UserManager {
 
     void addTransaction(vector<Transaction> &transactions, string filename, string keyWord);
     void sortTransactions(vector<Transaction> &transactions);
+
+    void showBalanceTable(int startDate, int endDate);
+
 
 public:
     UserManager(string newIncomeFilename, string newExpensesFilename, User newLoggedUser)
@@ -46,6 +52,9 @@ public:
     void addIncome();
     void addExpense();
     void showBalance();
+    void showCurrentMonthBalance();
+    void showPreviousMonthBalance();
+    string getUserFullName();
 };
 class comparison {
 	public:
