@@ -42,5 +42,9 @@ string Interface::intToString(int number) {
     string str = ss.str();
     return str;
 }
-
+int Interface::tmToInt(tm* &tmDate) {
+    int intDate;
+    intDate = (tmDate->tm_year + 1900) * pow(10,4) + (tmDate->tm_mon + 1) * pow (10,2) + tmDate->tm_mday;
+    return intDate;
+}
 //

@@ -4,14 +4,18 @@
 #include <fstream>
 #include <algorithm>
 
+#include <ctime>
+#include "PeronalBudget.h"
+
 using namespace std;
 
 int _main() {
-    double db;
-    int integer;
-    cin >> db;
-    integer = db;
-    cout << integer;
+    int currentDate;
+    time_t t = time(0);   // get time now
+    tm* now = localtime(&t);
+    currentDate = Interface::tmToInt(now);
+    cout << currentDate << endl;
+    return 0;
 }
 
 int main() {

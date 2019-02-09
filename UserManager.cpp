@@ -10,7 +10,7 @@ int UserManager::getCurrentDate() {
     int currentDate;
     time_t t = time(0);   // get time now
     tm* now = localtime(&t);
-    currentDate = (now->tm_year + 1900) * pow(10,4) + (now->tm_mon + 1) * pow (10,2) + now->tm_mday;
+    currentDate = Interface::tmToInt(now);
     return currentDate;
 }
 int UserManager::getUserDate() {
@@ -66,7 +66,7 @@ int UserManager::convertStringDateToInt(string date) {
     for(; i < date.size(); i++) {
         day=day*10+int(date[i])-48;
     }
-    if ((year < 1000) || (year > 9999)) {
+    if ((year < 1001) || (year > 9999)) {
         cout << "Niepoprawny rok." << endl;
         return 0;
     }
@@ -199,18 +199,25 @@ void UserManager::sortTransactions(vector<Transaction> &transactions) {
 void UserManager::showBalance() {
     system("cls");
     int startDate = 0, endDate = 0;
-
-
     cout << "Podaj date poczatkowa(yyyy-mm-dd): ";
     startDate = getUserDate();
     cout << "Podaj date koncowa(yyyy-mm-dd): ";
     endDate = getUserDate();
-    system("pause");
-
-
     showBalanceTable(startDate,endDate);
 }
 void UserManager::showBalanceTable(int startDate, int endDate) {
+    HANDLE hOut;
+    hOut = GetStdHandle( STD_OUTPUT_HANDLE );
+
+    string intro, temp1, temp2;
+    stringstream ss;
+    ss << convertIntDateToString(startDate);
+    ss >> temp1;
+    ss.clear();
+    ss << convertIntDateToString(endDate);
+    ss >> temp2;
+    intro = "od " + temp1 + " do " + temp2;
+
     vector<Transaction> selectedIncomes, selectedExpenses;
     for (int i = 0; i < incomes.size(); i++) {
         if((incomes[i].getDate() >= startDate) && (incomes[i].getDate() <= endDate)) {
@@ -225,7 +232,7 @@ void UserManager::showBalanceTable(int startDate, int endDate) {
 
     sortTransactions(selectedIncomes);
     sortTransactions(selectedExpenses);
-    double totalIncome = 0, totalExpense = 0;
+    double totalIncome = 0, totalExpense = 0, sum = 0;
     for (int i = 0; i < selectedIncomes.size(); i++) {
         totalIncome+= selectedIncomes[i].getValue();
     }
@@ -233,43 +240,84 @@ void UserManager::showBalanceTable(int startDate, int endDate) {
         totalExpense+= selectedExpenses[i].getValue();
     }
     system("cls");
-    cout << " >>> BILANS BUDZETU OSOBISTEGO <<<" << endl;
-    cout << "-----------------------------------" << endl;
-    cout << "|Przychody: ";
-    cout.width(22); cout << left << fixed << setprecision(2) << totalIncome << "|" << endl;
-    cout << "|---------------------------------|" << endl;
-    cout << "| Wartosc |    Nazwa   |   Data   |" << endl;
-    cout << "|---------------------------------|" << endl;
+    cout << "  >>> BILANS BUDZETU OSOBISTEGO <<<   " << endl;
+    cout << ",------------------------------------," << endl;
+    cout << "| Okres: ";
+    cout.width(27); cout << left << intro << " |" << endl;
+    cout << "|------------------------------------|" << endl;
+    cout << "| Przychody: ";
+    cout.width(24); cout << left << fixed << setprecision(2) << totalIncome << "|" << endl;
+    cout << "|                                    |" << endl;
+    cout << "|  ,---------------------------------|" << endl;
+    cout << "|  | Wartosc |    Nazwa   |   Data   |" << endl;
+    cout << "|  |---------------------------------|" << endl;
     for (int i = 0; i < selectedIncomes.size(); i++) {
-        cout << "|";
+        cout << "|  |";
         cout.width(9); cout << right << fixed << setprecision(2) << selectedIncomes[i].getValue() << "|";
         cout.width(12); cout << right << selectedIncomes[i].getItem() << "|";
         cout.width(10); cout << right << selectedIncomes[i].getStringDate() << "|";
         cout << endl;
     }
-    cout << "-----------------------------------" << endl;
-    cout << "|Wydatki: ";
-    cout.width(24); cout << left << fixed << setprecision(2) << totalExpense << "|" << endl;
-    cout << "|---------------------------------|" << endl;
-    cout << "| Wartosc |    Nazwa   |   Data   |" << endl;
-    cout << "|---------------------------------|" << endl;
+    cout << "|--'---------------------------------|" << endl;
+    cout << "| Wydatki: ";
+    cout.width(26); cout << left << fixed << setprecision(2) << totalExpense << "|" << endl;
+    cout << "|                                    |" << endl;
+    cout << "|  ,---------------------------------|" << endl;
+    cout << "|  | Wartosc |    Nazwa   |   Data   |" << endl;
+    cout << "|  |---------------------------------|" << endl;
     for (int i = 0; i < selectedExpenses.size(); i++) {
-        cout << "|";
+        cout << "|  |";
         cout.width(9); cout << right << fixed << setprecision(2) << selectedExpenses[i].getValue() << "|";
         cout.width(12); cout << right << selectedExpenses[i].getItem() << "|";
         cout.width(10); cout << right << selectedExpenses[i].getStringDate() << "|";
         cout << endl;
     }
-    cout << "-----------------------------------" << endl;
-    cout << "|Saldo: ";
-    cout.width(26); cout << left << fixed << setprecision(2) << totalIncome-totalExpense << "|" << endl;
-    cout << "-----------------------------------" << endl;
+    cout << "|------------------------------------|" << endl;
+    cout << "| Saldo: ";
+    sum = totalIncome-totalExpense;
+    int textAlign = 28;
+    if (sum >=0) {
+        SetConsoleTextAttribute( hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY );
+        cout << "+";
+        textAlign--;
+    }
+    else {
+        SetConsoleTextAttribute( hOut, FOREGROUND_RED | FOREGROUND_INTENSITY );
+    }
+    cout.width(textAlign); cout << left << fixed << setprecision(2) <<totalIncome-totalExpense ;
+    SetConsoleTextAttribute( hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED );
+    cout << "|" << endl;
+    cout << "'------------------------------------'" << endl;
     system("pause");
 }
 void UserManager::showCurrentMonthBalance() {
-    int startDate = 0, endDate = 0, currentDate = getCurrentDate();
-    startDate = (currentDate/100) * 100;
-    endDate = (currentDate/100) * 100 + 100;
+    int startDate = 0, endDate = 0;
+    time_t t = time(0);
+    tm* now = localtime(&t);
+    startDate = ((Interface::tmToInt(now))/100) * 100 + 1; // first day of current month
+    endDate = startDate + daysInMonth((now->tm_year) + 1900,(now->tm_mon) + 1) - 1;
     showBalanceTable(startDate,endDate);
 }
+void UserManager::showLastMonthBalance() {
+    int startDate = 0, endDate = 0;
+    time_t t = time(0);
+    tm* now = localtime(&t);
+    startDate = ((Interface::tmToInt(now))/100) * 100 + 1; // first day of current month
+    if ((now->tm_mon) == 0) { // 0 = styczeñ
+        startDate = startDate - 10000 + 1100; // -10000(-one year), +1100(from 1. January to 1. December)
+        endDate = startDate + 30;
+    }
+    else {
+        startDate -= 100; // -100 (-one month)
+        endDate = startDate + daysInMonth((now->tm_year) + 1900,(now->tm_mon)) - 1; // from first to last day of month
+    }
+    showBalanceTable(startDate,endDate);
+}
+string UserManager::convertIntDateToString(int date) {
+    string stringDate = Interface::intToString(date);
+    stringDate.insert(6,"-");
+    stringDate.insert(4,"-");
+    return stringDate;
+}
+
 //
