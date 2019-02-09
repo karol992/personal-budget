@@ -37,3 +37,40 @@ vector<Transaction> TransactionFiles::loadIncomesFromFile() {
     }
     return incomes;
 }
+void TransactionFiles::addExpenseToFile(Transaction expense) {
+    CMarkup xml;
+    xml.Load(EXPENSES_FILENAME);
+    xml.AddElem( "EXPENSE" );
+    xml.IntoElem();
+    {
+        xml.AddElem( "ID", expense.getId() );
+        xml.AddElem( "USERID", expense.getUserId() );
+        xml.AddElem( "DATE", expense.getDate() );
+        xml.AddElem( "ITEM", expense.getItem() );
+        xml.AddElem( "VALUE", expense.getStringValue() );
+    }
+    xml.OutOfElem();
+    xml.Save(EXPENSES_FILENAME);
+}
+vector<Transaction> TransactionFiles::loadExpensesFromFile() {
+    vector<Transaction> expenses;
+    CMarkup xml;
+    xml.Load(EXPENSES_FILENAME);
+    while (xml.FindElem("EXPENSE")) {
+        Transaction expense;
+        xml.IntoElem();
+        xml.FindElem("ID");
+        expense.setId(atoi(MCD_2PCSZ(xml.GetData())));
+        xml.FindElem("USERID");
+        expense.setUserId(atoi(MCD_2PCSZ(xml.GetData())));
+        xml.FindElem("DATE");
+        expense.setDate(atoi(MCD_2PCSZ(xml.GetData())));
+        xml.FindElem("ITEM");
+        expense.setItem(xml.GetData());
+        xml.FindElem("VALUE");
+        expense.setValue(Interface::stringToDouble(xml.GetData()));
+        xml.OutOfElem();
+        expenses.push_back(expense);
+    }
+    return expenses;
+}

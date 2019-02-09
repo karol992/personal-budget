@@ -29,13 +29,14 @@ class UserManager {
     double getTransactionValue();
     bool correctSignsInValue(string stringValue);
     double convertStringValueToDouble(string stringValue);
-    int getNewIncomeId();
+    int getNewTransactionId(vector<Transaction> transactions);
 public:
     UserManager(string newIncomeFilename, string newExpensesFilename, User newLoggedUser)
     : transactionFiles(newIncomeFilename, newExpensesFilename), loggedUserCopy(newLoggedUser) {
     incomes = transactionFiles.loadIncomesFromFile();
     };
     void addIncome();
+    void addExpense();
 };
 
 #endif // USERMANAGER_H

@@ -3,7 +3,7 @@
 void UserManager::addIncome() {
     Transaction income;
     string item;
-    income.setId(getNewIncomeId());
+    income.setId(getNewTransactionId(incomes));
     income.setUserId(loggedUserCopy.getId());
     char choice = NULL;
     do {
@@ -175,11 +175,47 @@ double UserManager::convertStringValueToDouble(string stringValue) {
     }
     return doubleValue;
 }
-int UserManager::getNewIncomeId() {
-    if (incomes.empty() == true)
+int UserManager::getNewTransactionId(vector <Transaction> transactions) {
+    if (transactions.empty() == true)
         return 1;
     else
-        return incomes.back().getId() + 1;
+        return transactions.back().getId() + 1;
 }
-
+void UserManager::addExpense() {
+    Transaction expense;
+    string item;
+    expense.setId(getNewTransactionId(expenses));
+    expense.setUserId(loggedUserCopy.getId());
+    char choice = NULL;
+    do {
+        system("cls");
+        cout << " >>> DODAWANIE WYDATKU <<<" << endl;
+        cout << "---------------------------" << endl;
+        cout << "Czy dodac z dzisiejsza data? (t/n)" << endl;
+        cin.sync();
+        choice = Interface::loadSign();
+        switch (choice) {
+        case 't':
+            expense.setDate(getCurrentDate());
+            cout << "Wpisz wartosc wydatku: ";
+            expense.setValue(getTransactionValue());
+            break;
+        case 'n':
+            cout << "Wpisz date wydatku (yyyy-mm-dd): ";
+            expense.setDate(getUserDate());
+            cout << "Wpisz wartosc wydatku: ";
+            expense.setValue(getTransactionValue());
+            break;
+        default:
+            cout << "Niepoprawny wybor." << endl;
+            break;
+        }
+    } while (choice!='n' && choice!='t');
+    cout << "Wpisz nazwe wydatku: ";
+    getline(cin, item);
+    expense.setItem(item);
+    expenses.push_back(expense);
+    transactionFiles.addExpenseToFile(expense);
+    system("pause");
+}
 //
