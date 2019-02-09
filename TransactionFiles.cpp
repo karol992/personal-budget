@@ -15,31 +15,30 @@ void TransactionFiles::addTransactionToFile (Transaction transaction, string fil
     xml.OutOfElem();
     xml.Save(filename);
 }
-vector<Transaction> TransactionFiles::loadTransactionsFromFile(string filename) {
+vector<Transaction> TransactionFiles::loadTransactionsFromFile(string filename, int loggedUserId) {
     vector<Transaction> transactions;
     CMarkup xml;
     xml.Load(filename);
     while (xml.FindElem("TRANSACTION")) {
         Transaction transaction;
         xml.IntoElem();
-        xml.FindElem("ID");
-        transaction.setId(atoi(MCD_2PCSZ(xml.GetData())));
         xml.FindElem("USERID");
-        transaction.setUserId(atoi(MCD_2PCSZ(xml.GetData())));
-        xml.FindElem("DATE");
-        transaction.setDate(atoi(MCD_2PCSZ(xml.GetData())));
-        xml.FindElem("ITEM");
-        transaction.setItem(xml.GetData());
-        xml.FindElem("VALUE");
-        transaction.setValue(Interface::stringToDouble(xml.GetData()));
+        int userId = atoi(MCD_2PCSZ(xml.GetData()));
+        if (userId == loggedUserId) {
+            transaction.setUserId(userId);
+            xml.FindElem("ID");
+            transaction.setId(atoi(MCD_2PCSZ(xml.GetData())));
+            xml.FindElem("DATE");
+            transaction.setDate(atoi(MCD_2PCSZ(xml.GetData())));
+            xml.FindElem("ITEM");
+            transaction.setItem(xml.GetData());
+            xml.FindElem("VALUE");
+            transaction.setValue(Interface::stringToDouble(xml.GetData()));
+            transactions.push_back(transaction);
+        }
         xml.OutOfElem();
-        transactions.push_back(transaction);
     }
     return transactions;
-}
-void TransactionFiles::sortTransactionsInFile(string filename) {
-    //vector<Transaction> transactions = loadTransactionsFromFile(filename);
-
 }
 
 //

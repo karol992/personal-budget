@@ -1,10 +1,10 @@
 #include "UserManager.h"
 
 void UserManager::addIncome() {
-    addTransaction(incomes, INCOMES_FILENAME, "dochodu");
+    addTransaction(incomes, INCOMES_FILENAME, "PRZYCHODU");
 }
 void UserManager::addExpense() {
-    addTransaction(expenses, EXPENSES_FILENAME, "wydatku");
+    addTransaction(expenses, EXPENSES_FILENAME, "WYDATKU");
 }
 int UserManager::getCurrentDate() {
     int currentDate;
@@ -170,13 +170,13 @@ void UserManager::addTransaction(vector<Transaction> &transactions, string filen
         switch (choice) {
         case 't':
             transaction.setDate(getCurrentDate());
-            cout << "Wpisz wartosc " << keyWord << ": ";
+            cout << "Wpisz wartosc: ";
             transaction.setValue(getTransactionValue());
             break;
         case 'n':
-            cout << "Wpisz date " << keyWord << " (yyyy-mm-dd): ";
+            cout << "Wpisz date (yyyy-mm-dd): ";
             transaction.setDate(getUserDate());
-            cout << "Wpisz wartosc " << keyWord << ": ";
+            cout << "Wpisz wartosc: ";
             transaction.setValue(getTransactionValue());
             break;
         default:
@@ -184,12 +184,62 @@ void UserManager::addTransaction(vector<Transaction> &transactions, string filen
             break;
         }
     } while (choice!='n' && choice!='t');
-    cout << "Wpisz nazwe " << keyWord << ": ";
+    cout << "Wpisz nazwe: ";
     getline(cin, item);
+    if(item.size() > 12)
+        item.resize(12);
     transaction.setItem(item);
     transactions.push_back(transaction);
     transactionFiles.addTransactionToFile(transaction, filename);
     system("pause");
 }
-
+void UserManager::sortTransactions(vector<Transaction> &transactions) {
+    sort(transactions.begin(), transactions.end(), comparison());
+}
+void UserManager::showBalance() {
+    sortTransactions(incomes);
+    sortTransactions(expenses);
+    system("cls");
+    double totalIncome = 0, totalExpense = 0;
+    for (int i = 0; i < incomes.size(); i++) {
+        totalIncome+= incomes[i].getValue();
+        //cout << totalIncome << endl;
+    }
+    for (int i = 0; i < expenses.size(); i++) {
+        totalExpense+= expenses[i].getValue();
+    }
+    cout << " >>> BILANS BUDZETU OSOBISTEGO <<<" << endl;
+    cout << "-----------------------------------" << endl;
+    cout << "|Przychody: ";
+    cout.width(22); cout << left << fixed << setprecision(2) << totalIncome << "|" << endl;
+    cout << "-----------------------------------" << endl;
+    cout << "| Wartosc |    Nazwa   |   Data   |" << endl;
+    cout << "-----------------------------------" << endl;
+    for (int i = 0; i < incomes.size(); i++) {
+        cout << "|";
+        cout.width(9); cout << right << fixed << setprecision(2) << incomes[i].getValue() << "|";
+        cout.width(12); cout << right << incomes[i].getItem() << "|";
+        cout.width(10); cout << right << incomes[i].getStringDate() << "|";
+        cout << endl;
+        totalIncome+= incomes[i].getValue();
+    }
+    cout << "-----------------------------------" << endl;
+    cout << "|Wydatki: ";
+    cout.width(24); cout << left << fixed << setprecision(2) << totalExpense << "|" << endl;
+    cout << "-----------------------------------" << endl;
+    cout << "| Wartosc |    Nazwa   |   Data   |" << endl;
+    cout << "-----------------------------------" << endl;
+    for (int i = 0; i < expenses.size(); i++) {
+        cout << "|";
+        cout.width(9); cout << right << fixed << setprecision(2) << expenses[i].getValue() << "|";
+        cout.width(12); cout << right << expenses[i].getItem() << "|";
+        cout.width(10); cout << right << expenses[i].getStringDate() << "|";
+        cout << endl;
+    }
+    cout << "-----------------------------------" << endl;
+    cout << "|Saldo: ";
+    cout.width(26); cout << left << fixed << setprecision(2) << totalIncome-totalExpense << "|" << endl;
+    cout << "-----------------------------------" << endl;
+    system("pause");
+}
 //

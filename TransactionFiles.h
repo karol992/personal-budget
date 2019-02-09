@@ -11,8 +11,7 @@ using namespace std;
 class TransactionFiles {
 public:
     void addTransactionToFile (Transaction transaction, string filename);
-    vector<Transaction> loadTransactionsFromFile(string filename);
-    void sortTransactionsInFile(string filename);
+    vector<Transaction> loadTransactionsFromFile(string filename, int loggedUserId);
 };
 
 #endif // TRANSACTIONFILES_H

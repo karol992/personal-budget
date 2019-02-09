@@ -36,4 +36,11 @@ double Interface::stringToDouble(string number) {
     iss >> doubleNumber;
     return doubleNumber;
 }
+string Interface::intToString(int number) {
+    ostringstream ss;
+    ss << number;
+    string str = ss.str();
+    return str;
+}
+
 //
