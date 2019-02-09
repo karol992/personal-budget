@@ -1,41 +1,10 @@
 #include "UserManager.h"
 
 void UserManager::addIncome() {
-    Transaction income;
-    string item;
-    income.setId(getNewTransactionId(incomes));
-    income.setUserId(loggedUserCopy.getId());
-    char choice = NULL;
-    do {
-        system("cls");
-        cout << " >>> DODAWANIE PRZYCHODU <<<" << endl;
-        cout << "---------------------------" << endl;
-        cout << "Czy dodac z dzisiejsza data? (t/n)" << endl;
-        cin.sync();
-        choice = Interface::loadSign();
-        switch (choice) {
-        case 't':
-            income.setDate(getCurrentDate());
-            cout << "Wpisz wartosc przychodu: ";
-            income.setValue(getTransactionValue());
-            break;
-        case 'n':
-            cout << "Wpisz date przychodu (yyyy-mm-dd): ";
-            income.setDate(getUserDate());
-            cout << "Wpisz wartosc przychodu: ";
-            income.setValue(getTransactionValue());
-            break;
-        default:
-            cout << "Niepoprawny wybor." << endl;
-            break;
-        }
-    } while (choice!='n' && choice!='t');
-    cout << "Wpisz nazwe przychodu: ";
-    getline(cin, item);
-    income.setItem(item);
-    incomes.push_back(income);
-    transactionFiles.addIncomeToFile(income);
-    system("pause");
+    addTransaction(incomes, INCOMES_FILENAME, "dochodu");
+}
+void UserManager::addExpense() {
+    addTransaction(expenses, EXPENSES_FILENAME, "wydatku");
 }
 int UserManager::getCurrentDate() {
     int currentDate;
@@ -96,6 +65,10 @@ int UserManager::convertStringDateToInt(string date) {
     i++;
     for(; i < date.size(); i++) {
         day=day*10+int(date[i])-48;
+    }
+    if ((year < 1000) || (year > 9999)) {
+        cout << "Niepoprawny rok." << endl;
+        return 0;
     }
     if ((month < 1) || (month > 12)) {
         cout << "Niepoprawny miesiac." << endl;
@@ -181,41 +154,42 @@ int UserManager::getNewTransactionId(vector <Transaction> transactions) {
     else
         return transactions.back().getId() + 1;
 }
-void UserManager::addExpense() {
-    Transaction expense;
+void UserManager::addTransaction(vector<Transaction> &transactions, string filename, string keyWord) {
+    Transaction transaction;
     string item;
-    expense.setId(getNewTransactionId(expenses));
-    expense.setUserId(loggedUserCopy.getId());
+    transaction.setId(getNewTransactionId(transactions));
+    transaction.setUserId(loggedUserCopy.getId());
     char choice = NULL;
     do {
         system("cls");
-        cout << " >>> DODAWANIE WYDATKU <<<" << endl;
+        cout << " >>> DODAWANIE " << keyWord << " <<<" << endl;
         cout << "---------------------------" << endl;
         cout << "Czy dodac z dzisiejsza data? (t/n)" << endl;
         cin.sync();
         choice = Interface::loadSign();
         switch (choice) {
         case 't':
-            expense.setDate(getCurrentDate());
-            cout << "Wpisz wartosc wydatku: ";
-            expense.setValue(getTransactionValue());
+            transaction.setDate(getCurrentDate());
+            cout << "Wpisz wartosc " << keyWord << ": ";
+            transaction.setValue(getTransactionValue());
             break;
         case 'n':
-            cout << "Wpisz date wydatku (yyyy-mm-dd): ";
-            expense.setDate(getUserDate());
-            cout << "Wpisz wartosc wydatku: ";
-            expense.setValue(getTransactionValue());
+            cout << "Wpisz date " << keyWord << " (yyyy-mm-dd): ";
+            transaction.setDate(getUserDate());
+            cout << "Wpisz wartosc " << keyWord << ": ";
+            transaction.setValue(getTransactionValue());
             break;
         default:
             cout << "Niepoprawny wybor." << endl;
             break;
         }
     } while (choice!='n' && choice!='t');
-    cout << "Wpisz nazwe wydatku: ";
+    cout << "Wpisz nazwe " << keyWord << ": ";
     getline(cin, item);
-    expense.setItem(item);
-    expenses.push_back(expense);
-    transactionFiles.addExpenseToFile(expense);
+    transaction.setItem(item);
+    transactions.push_back(transaction);
+    transactionFiles.addTransactionToFile(transaction, filename);
     system("pause");
 }
+
 //

@@ -9,15 +9,10 @@
 using namespace std;
 
 class TransactionFiles {
-    const string INCOMES_FILENAME;
-    const string EXPENSES_FILENAME;
 public:
-    TransactionFiles(string newIncomeFilename, string newExpensesFilename)
-    : INCOMES_FILENAME(newIncomeFilename), EXPENSES_FILENAME(newExpensesFilename) {};
-    void addIncomeToFile(Transaction income);
-    vector<Transaction> loadIncomesFromFile();
-    void addExpenseToFile(Transaction expense);
-    vector<Transaction> loadExpensesFromFile();
+    void addTransactionToFile (Transaction transaction, string filename);
+    vector<Transaction> loadTransactionsFromFile(string filename);
+    void sortTransactionsInFile(string filename);
 };
 
 #endif // TRANSACTIONFILES_H

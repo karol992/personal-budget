@@ -18,6 +18,8 @@ using namespace std;
 class UserManager {
     vector <Transaction> incomes;
     vector <Transaction> expenses;
+    const string INCOMES_FILENAME;
+    const string EXPENSES_FILENAME;
     TransactionFiles transactionFiles;
     User loggedUserCopy;
 
@@ -30,10 +32,13 @@ class UserManager {
     bool correctSignsInValue(string stringValue);
     double convertStringValueToDouble(string stringValue);
     int getNewTransactionId(vector<Transaction> transactions);
+
+    void addTransaction(vector<Transaction> &transactions, string filename, string keyWord);
 public:
     UserManager(string newIncomeFilename, string newExpensesFilename, User newLoggedUser)
-    : transactionFiles(newIncomeFilename, newExpensesFilename), loggedUserCopy(newLoggedUser) {
-    incomes = transactionFiles.loadIncomesFromFile();
+    : INCOMES_FILENAME(newIncomeFilename), EXPENSES_FILENAME(newExpensesFilename), loggedUserCopy(newLoggedUser) {
+    incomes = transactionFiles.loadTransactionsFromFile(INCOMES_FILENAME);
+    expenses = transactionFiles.loadTransactionsFromFile(EXPENSES_FILENAME);
     };
     void addIncome();
     void addExpense();
