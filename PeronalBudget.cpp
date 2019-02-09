@@ -48,7 +48,7 @@ void PersonalBudget::userMenu() {
         addExpense();
         break;
     case '3':
-        //showCurrentMonthBalance();
+        showCurrentMonthBalance();
         break;
     case '4':
         //showLastMonthBalance();
@@ -94,6 +94,9 @@ void PersonalBudget::addExpense() {
 }
 void PersonalBudget::showBalance() {
     userManager->showBalance();
+}
+void PersonalBudget::showCurrentMonthBalance() {
+    userManager->showCurrentMonthBalance();
 }
 
 //

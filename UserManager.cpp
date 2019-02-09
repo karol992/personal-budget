@@ -199,7 +199,7 @@ void UserManager::sortTransactions(vector<Transaction> &transactions) {
 void UserManager::showBalance() {
     system("cls");
     int startDate = 0, endDate = 0;
-    vector<Transaction> selectedIncomes, selectedExpenses;
+
 
     cout << "Podaj date poczatkowa(yyyy-mm-dd): ";
     startDate = getUserDate();
@@ -207,6 +207,11 @@ void UserManager::showBalance() {
     endDate = getUserDate();
     system("pause");
 
+
+    showBalanceTable(startDate,endDate);
+}
+void UserManager::showBalanceTable(int startDate, int endDate) {
+    vector<Transaction> selectedIncomes, selectedExpenses;
     for (int i = 0; i < incomes.size(); i++) {
         if((incomes[i].getDate() >= startDate) && (incomes[i].getDate() <= endDate)) {
             selectedIncomes.push_back(incomes[i]);
@@ -217,9 +222,7 @@ void UserManager::showBalance() {
             selectedExpenses.push_back(expenses[i]);
         }
     }
-    showBalanceTable(selectedIncomes,selectedExpenses);
-}
-void UserManager::showBalanceTable(vector<Transaction> selectedIncomes, vector<Transaction> selectedExpenses) {
+
     sortTransactions(selectedIncomes);
     sortTransactions(selectedExpenses);
     double totalIncome = 0, totalExpense = 0;
@@ -262,5 +265,11 @@ void UserManager::showBalanceTable(vector<Transaction> selectedIncomes, vector<T
     cout.width(26); cout << left << fixed << setprecision(2) << totalIncome-totalExpense << "|" << endl;
     cout << "-----------------------------------" << endl;
     system("pause");
+}
+void UserManager::showCurrentMonthBalance() {
+    int startDate = 0, endDate = 0, currentDate = getCurrentDate();
+    startDate = (currentDate/100) * 100;
+    endDate = (currentDate/100) * 100 + 100;
+    showBalanceTable(startDate,endDate);
 }
 //

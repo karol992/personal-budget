@@ -37,7 +37,7 @@ class UserManager {
     void addTransaction(vector<Transaction> &transactions, string filename, string keyWord);
     void sortTransactions(vector<Transaction> &transactions);
 
-    void showBalanceTable(vector<Transaction> selectedIncomes, vector<Transaction> selectedExpenses);
+    void showBalanceTable(int startDate, int endDate);
 
 
 public:
@@ -49,6 +49,7 @@ public:
     void addIncome();
     void addExpense();
     void showBalance();
+    void showCurrentMonthBalance();
 };
 class comparison {
 	public:
