@@ -37,6 +37,9 @@ class UserManager {
     void addTransaction(vector<Transaction> &transactions, string filename, string keyWord);
     void sortTransactions(vector<Transaction> &transactions);
 
+    void showBalanceTable(vector<Transaction> selectedIncomes, vector<Transaction> selectedExpenses);
+
+
 public:
     UserManager(string newIncomeFilename, string newExpensesFilename, User newLoggedUser)
     : INCOMES_FILENAME(newIncomeFilename), EXPENSES_FILENAME(newExpensesFilename), loggedUserCopy(newLoggedUser) {

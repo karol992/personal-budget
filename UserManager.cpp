@@ -197,43 +197,64 @@ void UserManager::sortTransactions(vector<Transaction> &transactions) {
     sort(transactions.begin(), transactions.end(), comparison());
 }
 void UserManager::showBalance() {
-    sortTransactions(incomes);
-    sortTransactions(expenses);
     system("cls");
-    double totalIncome = 0, totalExpense = 0;
+    int startDate = 0, endDate = 0;
+    vector<Transaction> selectedIncomes, selectedExpenses;
+
+    cout << "Podaj date poczatkowa(yyyy-mm-dd): ";
+    startDate = getUserDate();
+    cout << "Podaj date koncowa(yyyy-mm-dd): ";
+    endDate = getUserDate();
+    system("pause");
+
     for (int i = 0; i < incomes.size(); i++) {
-        totalIncome+= incomes[i].getValue();
-        //cout << totalIncome << endl;
+        if((incomes[i].getDate() >= startDate) && (incomes[i].getDate() <= endDate)) {
+            selectedIncomes.push_back(incomes[i]);
+        }
     }
     for (int i = 0; i < expenses.size(); i++) {
-        totalExpense+= expenses[i].getValue();
+        if((expenses[i].getDate() >= startDate) && (expenses[i].getDate() <= endDate)) {
+            selectedExpenses.push_back(expenses[i]);
+        }
     }
+    showBalanceTable(selectedIncomes,selectedExpenses);
+}
+void UserManager::showBalanceTable(vector<Transaction> selectedIncomes, vector<Transaction> selectedExpenses) {
+    sortTransactions(selectedIncomes);
+    sortTransactions(selectedExpenses);
+    double totalIncome = 0, totalExpense = 0;
+    for (int i = 0; i < selectedIncomes.size(); i++) {
+        totalIncome+= selectedIncomes[i].getValue();
+    }
+    for (int i = 0; i < selectedExpenses.size(); i++) {
+        totalExpense+= selectedExpenses[i].getValue();
+    }
+    system("cls");
     cout << " >>> BILANS BUDZETU OSOBISTEGO <<<" << endl;
     cout << "-----------------------------------" << endl;
     cout << "|Przychody: ";
     cout.width(22); cout << left << fixed << setprecision(2) << totalIncome << "|" << endl;
-    cout << "-----------------------------------" << endl;
+    cout << "|---------------------------------|" << endl;
     cout << "| Wartosc |    Nazwa   |   Data   |" << endl;
-    cout << "-----------------------------------" << endl;
-    for (int i = 0; i < incomes.size(); i++) {
+    cout << "|---------------------------------|" << endl;
+    for (int i = 0; i < selectedIncomes.size(); i++) {
         cout << "|";
-        cout.width(9); cout << right << fixed << setprecision(2) << incomes[i].getValue() << "|";
-        cout.width(12); cout << right << incomes[i].getItem() << "|";
-        cout.width(10); cout << right << incomes[i].getStringDate() << "|";
+        cout.width(9); cout << right << fixed << setprecision(2) << selectedIncomes[i].getValue() << "|";
+        cout.width(12); cout << right << selectedIncomes[i].getItem() << "|";
+        cout.width(10); cout << right << selectedIncomes[i].getStringDate() << "|";
         cout << endl;
-        totalIncome+= incomes[i].getValue();
     }
     cout << "-----------------------------------" << endl;
     cout << "|Wydatki: ";
     cout.width(24); cout << left << fixed << setprecision(2) << totalExpense << "|" << endl;
-    cout << "-----------------------------------" << endl;
+    cout << "|---------------------------------|" << endl;
     cout << "| Wartosc |    Nazwa   |   Data   |" << endl;
-    cout << "-----------------------------------" << endl;
-    for (int i = 0; i < expenses.size(); i++) {
+    cout << "|---------------------------------|" << endl;
+    for (int i = 0; i < selectedExpenses.size(); i++) {
         cout << "|";
-        cout.width(9); cout << right << fixed << setprecision(2) << expenses[i].getValue() << "|";
-        cout.width(12); cout << right << expenses[i].getItem() << "|";
-        cout.width(10); cout << right << expenses[i].getStringDate() << "|";
+        cout.width(9); cout << right << fixed << setprecision(2) << selectedExpenses[i].getValue() << "|";
+        cout.width(12); cout << right << selectedExpenses[i].getItem() << "|";
+        cout.width(10); cout << right << selectedExpenses[i].getStringDate() << "|";
         cout << endl;
     }
     cout << "-----------------------------------" << endl;
