@@ -1,39 +1,44 @@
 #include "TransactionFiles.h"
 
-void TransactionFiles::addIncomeToFile(Transaction income) {
+void TransactionFiles::addTransactionToFile (Transaction transaction, string filename) {
     CMarkup xml;
-    xml.Load(INCOMES_FILENAME);
-    xml.AddElem( "INCOME" );
+    xml.Load(filename);
+    xml.AddElem( "TRANSACTION" );
     xml.IntoElem();
     {
-        xml.AddElem( "ID", income.getId() );
-        xml.AddElem( "USERID", income.getUserId() );
-        xml.AddElem( "DATE", income.getDate() );
-        xml.AddElem( "ITEM", income.getItem() );
-        xml.AddElem( "VALUE", income.getStringValue() );
+        xml.AddElem( "ID", transaction.getId() );
+        xml.AddElem( "USERID", transaction.getUserId() );
+        xml.AddElem( "DATE", transaction.getDate() );
+        xml.AddElem( "ITEM", transaction.getItem() );
+        xml.AddElem( "VALUE", transaction.getStringValue() );
     }
     xml.OutOfElem();
-    xml.Save(INCOMES_FILENAME);
+    xml.Save(filename);
 }
-vector<Transaction> TransactionFiles::loadIncomesFromFile() {
-    vector<Transaction> incomes;
+vector<Transaction> TransactionFiles::loadTransactionsFromFile(string filename, int loggedUserId) {
+    vector<Transaction> transactions;
     CMarkup xml;
-    xml.Load(INCOMES_FILENAME);
-    while (xml.FindElem("INCOME")) {
-        Transaction income;
+    xml.Load(filename);
+    while (xml.FindElem("TRANSACTION")) {
+        Transaction transaction;
         xml.IntoElem();
-        xml.FindElem("ID");
-        income.setId(atoi(MCD_2PCSZ(xml.GetData())));
         xml.FindElem("USERID");
-        income.setUserId(atoi(MCD_2PCSZ(xml.GetData())));
-        xml.FindElem("DATE");
-        income.setDate(atoi(MCD_2PCSZ(xml.GetData())));
-        xml.FindElem("ITEM");
-        income.setItem(xml.GetData());
-        xml.FindElem("VALUE");
-        income.setValue(Interface::stringToDouble(xml.GetData()));
+        int userId = atoi(MCD_2PCSZ(xml.GetData()));
+        if (userId == loggedUserId) {
+            transaction.setUserId(userId);
+            xml.FindElem("ID");
+            transaction.setId(atoi(MCD_2PCSZ(xml.GetData())));
+            xml.FindElem("DATE");
+            transaction.setDate(atoi(MCD_2PCSZ(xml.GetData())));
+            xml.FindElem("ITEM");
+            transaction.setItem(xml.GetData());
+            xml.FindElem("VALUE");
+            transaction.setValue(Interface::stringToDouble(xml.GetData()));
+            transactions.push_back(transaction);
+        }
         xml.OutOfElem();
-        incomes.push_back(income);
     }
-    return incomes;
+    return transactions;
 }
+
+//

@@ -27,13 +27,16 @@ public:
         userManager = NULL;
     }
     void loginMenu();
-    void userMenu();
     void registration();
     void login();
     bool userIsLogged();
-    void userLogOut();
-    void changeLoggedUserPassword();
+
+    void userMenu();
     void addIncome();
+    void addExpense();
+    void showBalance();
+    void changeLoggedUserPassword();
+    void userLogOut();
 };
 
 #endif // PERSONALBUDGET_H

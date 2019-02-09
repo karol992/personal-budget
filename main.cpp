@@ -7,25 +7,13 @@
 using namespace std;
 
 int _main() {
-    string liczba;
-    cin >> liczba;
-    double liczbaInt;
-    istringstream iss(liczba);
-    iss >> liczbaInt;
+    double db;
+    int integer;
+    cin >> db;
+    integer = db;
+    cout << integer;
+}
 
-    cout << liczbaInt << endl;
-    return 0;
-}
-int __main() {
-    string a;
-    int b;
-    while (true) {
-    cin >> a;
-    b = a[0];
-    cout << b << endl;
-    }
-    return 0;
-}
 int main() {
     PersonalBudget test("xml/users.xml","xml/incomes.xml","xml/expenses.xml");
     while(true) {

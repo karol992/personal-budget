@@ -7,6 +7,7 @@
 #include <ctime>
 #include <math.h>
 #include <iomanip>
+#include <algorithm>
 
 #include "TransactionFiles.h"
 #include "Transaction.h"
@@ -18,6 +19,8 @@ using namespace std;
 class UserManager {
     vector <Transaction> incomes;
     vector <Transaction> expenses;
+    const string INCOMES_FILENAME;
+    const string EXPENSES_FILENAME;
     TransactionFiles transactionFiles;
     User loggedUserCopy;
 
@@ -29,13 +32,26 @@ class UserManager {
     double getTransactionValue();
     bool correctSignsInValue(string stringValue);
     double convertStringValueToDouble(string stringValue);
-    int getNewIncomeId();
+    int getNewTransactionId(vector<Transaction> transactions);
+
+    void addTransaction(vector<Transaction> &transactions, string filename, string keyWord);
+    void sortTransactions(vector<Transaction> &transactions);
+
 public:
     UserManager(string newIncomeFilename, string newExpensesFilename, User newLoggedUser)
-    : transactionFiles(newIncomeFilename, newExpensesFilename), loggedUserCopy(newLoggedUser) {
-    incomes = transactionFiles.loadIncomesFromFile();
+    : INCOMES_FILENAME(newIncomeFilename), EXPENSES_FILENAME(newExpensesFilename), loggedUserCopy(newLoggedUser) {
+    incomes = transactionFiles.loadTransactionsFromFile(INCOMES_FILENAME, loggedUserCopy.getId());
+    expenses = transactionFiles.loadTransactionsFromFile(EXPENSES_FILENAME, loggedUserCopy.getId());
     };
     void addIncome();
+    void addExpense();
+    void showBalance();
+};
+class comparison {
+	public:
+	bool operator () (  Transaction& first,   Transaction& second ) {
+		return (first.getDate() < second.getDate()) ? true : false;
+	}
 };
 
 #endif // USERMANAGER_H
