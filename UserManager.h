@@ -53,7 +53,8 @@ public:
     void addExpense();
     void showBalance();
     void showCurrentMonthBalance();
-    void showLastMonthBalance();
+    void showPreviousMonthBalance();
+    string getUserFullName();
 };
 class comparison {
 	public:

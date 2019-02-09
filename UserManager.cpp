@@ -163,7 +163,7 @@ void UserManager::addTransaction(vector<Transaction> &transactions, string filen
     do {
         system("cls");
         cout << " >>> DODAWANIE " << keyWord << " <<<" << endl;
-        cout << "---------------------------" << endl;
+        cout << "---------------------------------" << endl;
         cout << "Czy dodac z dzisiejsza data? (t/n)" << endl;
         cin.sync();
         choice = Interface::loadSign();
@@ -216,6 +216,7 @@ void UserManager::showBalanceTable(int startDate, int endDate) {
     ss.clear();
     ss << convertIntDateToString(endDate);
     ss >> temp2;
+    ss.clear();
     intro = "od " + temp1 + " do " + temp2;
 
     vector<Transaction> selectedIncomes, selectedExpenses;
@@ -242,12 +243,14 @@ void UserManager::showBalanceTable(int startDate, int endDate) {
     system("cls");
     cout << "  >>> BILANS BUDZETU OSOBISTEGO <<<   " << endl;
     cout << ",------------------------------------," << endl;
+    cout << "| Wlasciciel: ";
+    cout.width(23); cout << left << getUserFullName() << "|" << endl;
     cout << "| Okres: ";
     cout.width(27); cout << left << intro << " |" << endl;
-    cout << "|------------------------------------|" << endl;
+    cout << "|====================================|" << endl;
     cout << "| Przychody: ";
     cout.width(24); cout << left << fixed << setprecision(2) << totalIncome << "|" << endl;
-    cout << "|                                    |" << endl;
+    //cout << "|                                    |" << endl;
     cout << "|  ,---------------------------------|" << endl;
     cout << "|  | Wartosc |    Nazwa   |   Data   |" << endl;
     cout << "|  |---------------------------------|" << endl;
@@ -258,10 +261,10 @@ void UserManager::showBalanceTable(int startDate, int endDate) {
         cout.width(10); cout << right << selectedIncomes[i].getStringDate() << "|";
         cout << endl;
     }
-    cout << "|--'---------------------------------|" << endl;
+    cout << "|====================================|" << endl;
     cout << "| Wydatki: ";
     cout.width(26); cout << left << fixed << setprecision(2) << totalExpense << "|" << endl;
-    cout << "|                                    |" << endl;
+    //cout << "|                                    |" << endl;
     cout << "|  ,---------------------------------|" << endl;
     cout << "|  | Wartosc |    Nazwa   |   Data   |" << endl;
     cout << "|  |---------------------------------|" << endl;
@@ -272,7 +275,7 @@ void UserManager::showBalanceTable(int startDate, int endDate) {
         cout.width(10); cout << right << selectedExpenses[i].getStringDate() << "|";
         cout << endl;
     }
-    cout << "|------------------------------------|" << endl;
+    cout << "|====================================|" << endl;
     cout << "| Saldo: ";
     sum = totalIncome-totalExpense;
     int textAlign = 28;
@@ -298,7 +301,7 @@ void UserManager::showCurrentMonthBalance() {
     endDate = startDate + daysInMonth((now->tm_year) + 1900,(now->tm_mon) + 1) - 1;
     showBalanceTable(startDate,endDate);
 }
-void UserManager::showLastMonthBalance() {
+void UserManager::showPreviousMonthBalance() {
     int startDate = 0, endDate = 0;
     time_t t = time(0);
     tm* now = localtime(&t);
@@ -318,6 +321,11 @@ string UserManager::convertIntDateToString(int date) {
     stringDate.insert(6,"-");
     stringDate.insert(4,"-");
     return stringDate;
+}
+string UserManager::getUserFullName() {
+    string fullname;
+    fullname = loggedUserCopy.getName() + " " + loggedUserCopy.getSurname();
+    return fullname;
 }
 
 //

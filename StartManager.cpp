@@ -16,8 +16,8 @@ User StartManager::enterNewUserData() {
     string login = "", password = "", name = "", surname = "";
     do {
         system("cls");
-        cout << "    >>> REJESTRACJA <<<" << endl;
-        cout << "---------------------------" << endl;
+        cout << "       >>> REJESTRACJA <<<" << endl;
+        cout << "---------------------------------" << endl;
         cout << "Podaj login: ";
         cin >> login;
         user.setLogin(login);
@@ -52,8 +52,8 @@ int StartManager::getNewUserId() {
 void StartManager::login() {
     string login = "", password = "";
     system("cls");
-    cout << "    >>> LOGOWANIE <<<" << endl;
-    cout << "---------------------------" << endl;
+    cout << "        >>> LOGOWANIE <<<" << endl;
+    cout << "---------------------------------" << endl;
     cout << "Podaj login: ";
     cin >> login;
     for (int i = 0; i < users.size(); i++) {
