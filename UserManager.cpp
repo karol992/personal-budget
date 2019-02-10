@@ -55,6 +55,8 @@ bool UserManager::correctSignsInDate(string date) {
 }
 int UserManager::convertStringDateToInt(string date) {
     int i = 0, year = 0, month = 0, day = 0, intDate = 0;
+    time_t t = time(0);
+    tm* now = localtime(&t);
     for(; (int(date[i]) >= 48) && (int(date[i]) <= 57); i++) {
         year=year*10+int(date[i])-48;
     }
@@ -66,11 +68,11 @@ int UserManager::convertStringDateToInt(string date) {
     for(; i < date.size(); i++) {
         day=day*10+int(date[i])-48;
     }
-    if ((year < 1001) || (year > 9999)) {
+    if ((year < 2000) || (year > (now->tm_year + 1900))) {
         cout << "Niepoprawny rok." << endl;
         return 0;
     }
-    if ((month < 1) || (month > 12)) {
+    if ( ((month < 1) || (month > 12)) || (year == (now->tm_year + 1900) && month > (now->tm_mon + 1)) ) {
         cout << "Niepoprawny miesiac." << endl;
         return 0;
     }
@@ -201,8 +203,13 @@ void UserManager::showBalance() {
     int startDate = 0, endDate = 0;
     cout << "Podaj date poczatkowa(yyyy-mm-dd): ";
     startDate = getUserDate();
-    cout << "Podaj date koncowa(yyyy-mm-dd): ";
-    endDate = getUserDate();
+    do {
+        cout << "Podaj date koncowa(yyyy-mm-dd): ";
+        endDate = getUserDate();
+        if (endDate < startDate) {
+            cout << "Data koncowa nie moze byc wczesniejsza niz poczatkowa." << endl;
+        }
+    } while (endDate < startDate);
     showBalanceTable(startDate,endDate);
 }
 void UserManager::showBalanceTable(int startDate, int endDate) {
