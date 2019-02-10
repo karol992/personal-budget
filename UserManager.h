@@ -51,7 +51,7 @@ public:
     };
     void addIncome();
     void addExpense();
-    void showBalance();
+    void showSelectedPeriodBalance();
     void showCurrentMonthBalance();
     void showPreviousMonthBalance();
     string getUserFullName();
