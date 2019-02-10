@@ -55,6 +55,8 @@ bool UserManager::correctSignsInDate(string date) {
 }
 int UserManager::convertStringDateToInt(string date) {
     int i = 0, year = 0, month = 0, day = 0, intDate = 0;
+    time_t t = time(0);
+    tm* now = localtime(&t);
     for(; (int(date[i]) >= 48) && (int(date[i]) <= 57); i++) {
         year=year*10+int(date[i])-48;
     }
@@ -66,11 +68,11 @@ int UserManager::convertStringDateToInt(string date) {
     for(; i < date.size(); i++) {
         day=day*10+int(date[i])-48;
     }
-    if ((year < 1001) || (year > 9999)) {
+    if ((year < 2000) || (year > (now->tm_year + 1900))) {
         cout << "Niepoprawny rok." << endl;
         return 0;
     }
-    if ((month < 1) || (month > 12)) {
+    if ( ((month < 1) || (month > 12)) || (year == (now->tm_year + 1900) && month > (now->tm_mon + 1)) ) {
         cout << "Niepoprawny miesiac." << endl;
         return 0;
     }
@@ -115,7 +117,7 @@ bool UserManager::correctSignsInValue(string stringValue) {
         if (sign == 44 || sign == 46) {
             dotCounter++;
             if (stringValue.size() > i+3) {
-                cout << "Zly format wartosci. #1" << endl;
+                cout << "Zly format wartosci: waluta z dokladnoscia do 0.01 ." << endl;
                 return false;
             }
         }
@@ -125,7 +127,7 @@ bool UserManager::correctSignsInValue(string stringValue) {
         }
     }
     if (dotCounter > 1) {
-        cout << "Zly format wartosci. #2" << endl;
+        cout << "Zly format wartosci: zbyt wiele przecinkow." << endl;
         return false;
     }
     if (stringValue.empty()) {
@@ -162,22 +164,18 @@ void UserManager::addTransaction(vector<Transaction> &transactions, string filen
     char choice = NULL;
     do {
         system("cls");
-        cout << " >>> DODAWANIE " << keyWord << " <<<" << endl;
-        cout << "---------------------------------" << endl;
+        cout << "   >>> DODAWANIE " << keyWord << " <<<" << endl;
+        cout << "-------------------------------------" << endl;
         cout << "Czy dodac z dzisiejsza data? (t/n)" << endl;
         cin.sync();
         choice = Interface::loadSign();
         switch (choice) {
         case 't':
             transaction.setDate(getCurrentDate());
-            cout << "Wpisz wartosc: ";
-            transaction.setValue(getTransactionValue());
             break;
         case 'n':
             cout << "Wpisz date (yyyy-mm-dd): ";
             transaction.setDate(getUserDate());
-            cout << "Wpisz wartosc: ";
-            transaction.setValue(getTransactionValue());
             break;
         default:
             cout << "Niepoprawny wybor." << endl;
@@ -186,23 +184,32 @@ void UserManager::addTransaction(vector<Transaction> &transactions, string filen
     } while (choice!='n' && choice!='t');
     cout << "Wpisz nazwe: ";
     getline(cin, item);
-    if(item.size() > 12)
-        item.resize(12);
+    if(item.size() > 53)
+        item.resize(53);
     transaction.setItem(item);
+    cout << "Wpisz wartosc: ";
+    transaction.setValue(getTransactionValue());
     transactions.push_back(transaction);
     transactionFiles.addTransactionToFile(transaction, filename);
+    transform(keyWord.begin(), keyWord.end(), keyWord.begin(), ::tolower);
+    cout << "Dodano pozycje " << keyWord << "." << endl << endl;
     system("pause");
 }
 void UserManager::sortTransactions(vector<Transaction> &transactions) {
     sort(transactions.begin(), transactions.end(), comparison());
 }
-void UserManager::showBalance() {
+void UserManager::showSelectedPeriodBalance() {
     system("cls");
     int startDate = 0, endDate = 0;
     cout << "Podaj date poczatkowa(yyyy-mm-dd): ";
     startDate = getUserDate();
-    cout << "Podaj date koncowa(yyyy-mm-dd): ";
-    endDate = getUserDate();
+    do {
+        cout << "Podaj date koncowa(yyyy-mm-dd): ";
+        endDate = getUserDate();
+        if (endDate < startDate) {
+            cout << "Data koncowa nie moze byc wczesniejsza niz poczatkowa." << endl;
+        }
+    } while (endDate < startDate);
     showBalanceTable(startDate,endDate);
 }
 void UserManager::showBalanceTable(int startDate, int endDate) {
@@ -234,65 +241,65 @@ void UserManager::showBalanceTable(int startDate, int endDate) {
     sortTransactions(selectedIncomes);
     sortTransactions(selectedExpenses);
     double totalIncome = 0, totalExpense = 0, sum = 0;
+    int maxItemSize = 12;
     for (int i = 0; i < selectedIncomes.size(); i++) {
         totalIncome+= selectedIncomes[i].getValue();
+        if (selectedIncomes[i].getItem().size() > maxItemSize)
+            maxItemSize = selectedIncomes[i].getItem().size();
     }
     for (int i = 0; i < selectedExpenses.size(); i++) {
         totalExpense+= selectedExpenses[i].getValue();
+        if (selectedExpenses[i].getItem().size() > maxItemSize)
+            maxItemSize = selectedExpenses[i].getItem().size();
     }
-    system("cls");
-    cout << "  >>> BILANS BUDZETU OSOBISTEGO <<<   " << endl;
-    cout << ",------------------------------------," << endl;
-    cout << "| Wlasciciel: ";
-    cout.width(23); cout << left << getUserFullName() << "|" << endl;
-    cout << "| Okres: ";
-    cout.width(27); cout << left << intro << " |" << endl;
-    cout << "|====================================|" << endl;
-    cout << "| Przychody: ";
-    cout.width(24); cout << left << fixed << setprecision(2) << totalIncome << "|" << endl;
-    //cout << "|                                    |" << endl;
-    cout << "|  ,---------------------------------|" << endl;
-    cout << "|  | Wartosc |    Nazwa   |   Data   |" << endl;
-    cout << "|  |---------------------------------|" << endl;
-    for (int i = 0; i < selectedIncomes.size(); i++) {
-        cout << "|  |";
-        cout.width(9); cout << right << fixed << setprecision(2) << selectedIncomes[i].getValue() << "|";
-        cout.width(12); cout << right << selectedIncomes[i].getItem() << "|";
-        cout.width(10); cout << right << selectedIncomes[i].getStringDate() << "|";
-        cout << endl;
-    }
-    cout << "|====================================|" << endl;
-    cout << "| Wydatki: ";
-    cout.width(26); cout << left << fixed << setprecision(2) << totalExpense << "|" << endl;
-    //cout << "|                                    |" << endl;
-    cout << "|  ,---------------------------------|" << endl;
-    cout << "|  | Wartosc |    Nazwa   |   Data   |" << endl;
-    cout << "|  |---------------------------------|" << endl;
-    for (int i = 0; i < selectedExpenses.size(); i++) {
-        cout << "|  |";
-        cout.width(9); cout << right << fixed << setprecision(2) << selectedExpenses[i].getValue() << "|";
-        cout.width(12); cout << right << selectedExpenses[i].getItem() << "|";
-        cout.width(10); cout << right << selectedExpenses[i].getStringDate() << "|";
-        cout << endl;
-    }
-    cout << "|====================================|" << endl;
-    cout << "| Saldo: ";
     sum = totalIncome-totalExpense;
-    int textAlign = 28;
+
+    system("cls");
+    int textWidth = maxItemSize + 26;//min. 38(item.size() = 12) , max 79(item.size() = 53)
+    writeSign(' ',(textWidth - 33)/2); cout << ">>> BILANS BUDZETU OSOBISTEGO <<<" << endl;
+    cout << ","; writeSign('-',textWidth-2); cout << "," << endl;
+    cout << "| Wlasciciel: ";
+    cout.width(textWidth-15); cout << left << getUserFullName() << "|" << endl;
+    cout << "| Okres: ";
+    cout.width(textWidth-11); cout << left << intro << " |" << endl;
+
+    showTransactionList(selectedIncomes, totalIncome, textWidth, "Przychody");
+    showTransactionList(selectedExpenses, totalExpense, textWidth, "Wydatki");
+
+    cout << "|"; writeSign('=',textWidth-2); cout << "|" << endl;
+    cout << "| Saldo: ";
     if (sum >=0) {
         SetConsoleTextAttribute( hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY );
         cout << "+";
-        textAlign--;
+        textWidth--;
     }
     else {
         SetConsoleTextAttribute( hOut, FOREGROUND_RED | FOREGROUND_INTENSITY );
     }
-    cout.width(textAlign); cout << left << fixed << setprecision(2) <<totalIncome-totalExpense ;
+    cout.width(textWidth-10); cout << left << fixed << setprecision(2) <<totalIncome-totalExpense ;
     SetConsoleTextAttribute( hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED );
     cout << "|" << endl;
-    cout << "'------------------------------------'" << endl;
+    cout << "'"; writeSign('-',textWidth-2); cout << "'" << endl;
     system("pause");
 }
+
+void UserManager::showTransactionList(vector<Transaction> selectedTransactions, double total, int textWidth, string title) {
+    cout << "|"; writeSign('=',textWidth-2); cout << "|" << endl;
+    cout << "| " << title << ": ";
+    cout.width(textWidth - title.size() - 5 ); cout << left << fixed << setprecision(2) << total << "|" << endl;
+    cout << "|  ,"; writeSign('-',textWidth-5); cout << "|" << endl;
+    cout << "|  | Wartosc |"; writeSign(' ',(textWidth-31)/2); cout << "Nazwa";
+    writeSign(' ',((textWidth-31)/2 + (textWidth-31)%2)); cout << "|   Data   |" << endl;
+    cout << "|  |"; writeSign('-',textWidth-5); cout << "|" << endl;
+    for (int i = 0; i < selectedTransactions.size(); i++) {
+        cout << "|  |";
+        cout.width(9); cout << right << fixed << setprecision(2) << selectedTransactions[i].getValue() << "|";
+        cout.width(textWidth-26); cout << left << selectedTransactions[i].getItem() << "|";
+        cout.width(10); cout << right << selectedTransactions[i].getStringDate() << "|";
+        cout << endl;
+    }
+}
+
 void UserManager::showCurrentMonthBalance() {
     int startDate = 0, endDate = 0;
     time_t t = time(0);
@@ -326,6 +333,11 @@ string UserManager::getUserFullName() {
     string fullname;
     fullname = loggedUserCopy.getName() + " " + loggedUserCopy.getSurname();
     return fullname;
+}
+void UserManager::writeSign(char sign, int amount) {
+    for (int i = 0; i < amount; i++) {
+        cout << sign;
+    }
 }
 
 //

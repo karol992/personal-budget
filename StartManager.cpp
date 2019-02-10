@@ -87,6 +87,7 @@ void StartManager::clearLoggedUser() {
     loggedUser.clear();
 }
 void StartManager::changeLoggedUserPassword() {
+    system("cls");
     string newPassword = "";
     cout << "Podaj nowe haslo: ";
     cin >> newPassword;

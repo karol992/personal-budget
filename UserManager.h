@@ -36,12 +36,13 @@ class UserManager {
     bool correctSignsInValue(string stringValue);
     double convertStringValueToDouble(string stringValue);
     int getNewTransactionId(vector<Transaction> transactions);
+    void writeSign(char sign, int amount);
 
     void addTransaction(vector<Transaction> &transactions, string filename, string keyWord);
     void sortTransactions(vector<Transaction> &transactions);
 
     void showBalanceTable(int startDate, int endDate);
-
+    void showTransactionList(vector<Transaction> selectedTransactions, double total, int textWidth, string title);
 
 public:
     UserManager(string newIncomeFilename, string newExpensesFilename, User newLoggedUser)
@@ -51,7 +52,7 @@ public:
     };
     void addIncome();
     void addExpense();
-    void showBalance();
+    void showSelectedPeriodBalance();
     void showCurrentMonthBalance();
     void showPreviousMonthBalance();
     string getUserFullName();

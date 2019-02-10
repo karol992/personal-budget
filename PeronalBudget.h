@@ -36,7 +36,7 @@ public:
     void addExpense();
     void showCurrentMonthBalance();
     void showPreviousMonthBalance();
-    void showBalance();
+    void showSelectedPeriodBalance();
     void changeLoggedUserPassword();
     void userLogOut();
 };
