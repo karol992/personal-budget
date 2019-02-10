@@ -42,7 +42,7 @@ class UserManager {
     void sortTransactions(vector<Transaction> &transactions);
 
     void showBalanceTable(int startDate, int endDate);
-
+    void showTransactionList(vector<Transaction> selectedTransactions, double total, int textWidth, string title);
 
 public:
     UserManager(string newIncomeFilename, string newExpensesFilename, User newLoggedUser)
