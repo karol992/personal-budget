@@ -36,6 +36,7 @@ class UserManager {
     bool correctSignsInValue(string stringValue);
     double convertStringValueToDouble(string stringValue);
     int getNewTransactionId(vector<Transaction> transactions);
+    void writeSign(char sign, int amount);
 
     void addTransaction(vector<Transaction> &transactions, string filename, string keyWord);
     void sortTransactions(vector<Transaction> &transactions);

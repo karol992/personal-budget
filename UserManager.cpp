@@ -184,8 +184,8 @@ void UserManager::addTransaction(vector<Transaction> &transactions, string filen
     } while (choice!='n' && choice!='t');
     cout << "Wpisz nazwe: ";
     getline(cin, item);
-    if(item.size() > 16)
-        item.resize(16);
+    if(item.size() > 53)
+        item.resize(53);
     transaction.setItem(item);
     cout << "Wpisz wartosc: ";
     transaction.setValue(getTransactionValue());
@@ -241,63 +241,70 @@ void UserManager::showBalanceTable(int startDate, int endDate) {
     sortTransactions(selectedIncomes);
     sortTransactions(selectedExpenses);
     double totalIncome = 0, totalExpense = 0, sum = 0;
+    int maxItemSize = 12;
     for (int i = 0; i < selectedIncomes.size(); i++) {
         totalIncome+= selectedIncomes[i].getValue();
+        if (selectedIncomes[i].getItem().size() > maxItemSize)
+            maxItemSize = selectedIncomes[i].getItem().size();
     }
     for (int i = 0; i < selectedExpenses.size(); i++) {
         totalExpense+= selectedExpenses[i].getValue();
+        if (selectedExpenses[i].getItem().size() > maxItemSize)
+            maxItemSize = selectedExpenses[i].getItem().size();
     }
+
     system("cls");
-    cout << "    >>> BILANS BUDZETU OSOBISTEGO <<<     " << endl;
-    cout << ",----------------------------------------," << endl;
+    int textWidth = maxItemSize + 26;//min. 31(item.size() = 5) , max 79(item.size() = 53)
+    writeSign(' ',(textWidth - 33)/2); cout << ">>> BILANS BUDZETU OSOBISTEGO <<<" << endl;
+    cout << ","; writeSign('-',textWidth-2); cout << "," << endl;
     cout << "| Wlasciciel: ";
-    cout.width(27); cout << left << getUserFullName() << "|" << endl;
+    cout.width(textWidth-15); cout << left << getUserFullName() << "|" << endl;
     cout << "| Okres: ";
-    cout.width(31); cout << left << intro << " |" << endl;
-    cout << "|========================================|" << endl;
+    cout.width(textWidth-11); cout << left << intro << " |" << endl;
+    cout << "|"; writeSign('=',textWidth-2); cout << "|" << endl;
     cout << "| Przychody: ";
-    cout.width(28); cout << left << fixed << setprecision(2) << totalIncome << "|" << endl;
+    cout.width(textWidth-14); cout << left << fixed << setprecision(2) << totalIncome << "|" << endl;
     //cout << "|                                    |" << endl;
-    cout << "|  ,-------------------------------------|" << endl;
-    cout << "|  | Wartosc |      Nazwa     |   Data   |" << endl;
-    cout << "|  |-------------------------------------|" << endl;
+    cout << "|  ,"; writeSign('-',textWidth-5); cout << "|" << endl;
+    cout << "|  | Wartosc |"; writeSign(' ',(textWidth-31)/2); cout << "Nazwa";
+    writeSign(' ',((textWidth-31)/2 + (textWidth-31)%2)); cout << "|   Data   |" << endl;
+    cout << "|  |"; writeSign('-',textWidth-5); cout << "|" << endl;
     for (int i = 0; i < selectedIncomes.size(); i++) {
         cout << "|  |";
         cout.width(9); cout << right << fixed << setprecision(2) << selectedIncomes[i].getValue() << "|";
-        cout.width(16); cout << left << selectedIncomes[i].getItem() << "|";
+        cout.width(textWidth-26); cout << left << selectedIncomes[i].getItem() << "|";
         cout.width(10); cout << right << selectedIncomes[i].getStringDate() << "|";
         cout << endl;
     }
-    cout << "|========================================|" << endl;
+    cout << "|"; writeSign('=',textWidth-2); cout << "|" << endl;
     cout << "| Wydatki: ";
-    cout.width(30); cout << left << fixed << setprecision(2) << totalExpense << "|" << endl;
-    //cout << "|                                    |" << endl;
-    cout << "|  ,-------------------------------------|" << endl;
-    cout << "|  | Wartosc |      Nazwa     |   Data   |" << endl;
-    cout << "|  |-------------------------------------|" << endl;
+    cout.width(textWidth-12); cout << left << fixed << setprecision(2) << totalExpense << "|" << endl;
+    cout << "|  ,"; writeSign('-',textWidth-5); cout << "|" << endl;
+    cout << "|  | Wartosc |"; writeSign(' ',(textWidth-31)/2); cout << "Nazwa";
+    writeSign(' ',((textWidth-31)/2 + (textWidth-31)%2)); cout << "|   Data   |" << endl;
+    cout << "|  |"; writeSign('-',textWidth-5); cout << "|" << endl;
     for (int i = 0; i < selectedExpenses.size(); i++) {
         cout << "|  |";
         cout.width(9); cout << right << fixed << setprecision(2) << selectedExpenses[i].getValue() << "|";
-        cout.width(16); cout << left << selectedExpenses[i].getItem() << "|";
+        cout.width(textWidth-26); cout << left << selectedExpenses[i].getItem() << "|";
         cout.width(10); cout << right << selectedExpenses[i].getStringDate() << "|";
         cout << endl;
     }
-    cout << "|========================================|" << endl;
+    cout << "|"; writeSign('=',textWidth-2); cout << "|" << endl;
     cout << "| Saldo: ";
     sum = totalIncome-totalExpense;
-    int textAlign = 32;
     if (sum >=0) {
         SetConsoleTextAttribute( hOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY );
         cout << "+";
-        textAlign--;
+        textWidth--;
     }
     else {
         SetConsoleTextAttribute( hOut, FOREGROUND_RED | FOREGROUND_INTENSITY );
     }
-    cout.width(textAlign); cout << left << fixed << setprecision(2) <<totalIncome-totalExpense ;
+    cout.width(textWidth-10); cout << left << fixed << setprecision(2) <<totalIncome-totalExpense ;
     SetConsoleTextAttribute( hOut, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED );
     cout << "|" << endl;
-    cout << "'----------------------------------------'" << endl;
+    cout << "'"; writeSign('-',textWidth-2); cout << "'" << endl;
     system("pause");
 }
 void UserManager::showCurrentMonthBalance() {
@@ -333,6 +340,11 @@ string UserManager::getUserFullName() {
     string fullname;
     fullname = loggedUserCopy.getName() + " " + loggedUserCopy.getSurname();
     return fullname;
+}
+void UserManager::writeSign(char sign, int amount) {
+    for (int i = 0; i < amount; i++) {
+        cout << sign;
+    }
 }
 
 //
