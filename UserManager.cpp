@@ -117,7 +117,7 @@ bool UserManager::correctSignsInValue(string stringValue) {
         if (sign == 44 || sign == 46) {
             dotCounter++;
             if (stringValue.size() > i+3) {
-                cout << "Zly format wartosci. #1" << endl;
+                cout << "Zly format wartosci: waluta z dokladnoscia do 0.01 ." << endl;
                 return false;
             }
         }
@@ -127,7 +127,7 @@ bool UserManager::correctSignsInValue(string stringValue) {
         }
     }
     if (dotCounter > 1) {
-        cout << "Zly format wartosci. #2" << endl;
+        cout << "Zly format wartosci: zbyt wiele przecinkow." << endl;
         return false;
     }
     if (stringValue.empty()) {
@@ -164,22 +164,18 @@ void UserManager::addTransaction(vector<Transaction> &transactions, string filen
     char choice = NULL;
     do {
         system("cls");
-        cout << " >>> DODAWANIE " << keyWord << " <<<" << endl;
-        cout << "---------------------------------" << endl;
+        cout << "   >>> DODAWANIE " << keyWord << " <<<" << endl;
+        cout << "-------------------------------------" << endl;
         cout << "Czy dodac z dzisiejsza data? (t/n)" << endl;
         cin.sync();
         choice = Interface::loadSign();
         switch (choice) {
         case 't':
             transaction.setDate(getCurrentDate());
-            cout << "Wpisz wartosc: ";
-            transaction.setValue(getTransactionValue());
             break;
         case 'n':
             cout << "Wpisz date (yyyy-mm-dd): ";
             transaction.setDate(getUserDate());
-            cout << "Wpisz wartosc: ";
-            transaction.setValue(getTransactionValue());
             break;
         default:
             cout << "Niepoprawny wybor." << endl;
@@ -191,8 +187,12 @@ void UserManager::addTransaction(vector<Transaction> &transactions, string filen
     if(item.size() > 16)
         item.resize(16);
     transaction.setItem(item);
+    cout << "Wpisz wartosc: ";
+    transaction.setValue(getTransactionValue());
     transactions.push_back(transaction);
     transactionFiles.addTransactionToFile(transaction, filename);
+    transform(keyWord.begin(), keyWord.end(), keyWord.begin(), ::tolower);
+    cout << "Dodano pozycje " << keyWord << "." << endl << endl;
     system("pause");
 }
 void UserManager::sortTransactions(vector<Transaction> &transactions) {
